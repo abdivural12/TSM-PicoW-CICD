@@ -1,0 +1,25 @@
+# Dossier de build CMake
+/build/
+build/
+
+# Fichiers générés
+*.elf
+*.bin
+*.uf2
+*.hex
+*.map
+*.lst
+
+# Fichiers de test
+Testing/
+CTestTestfile.cmake
+Makefile
+cmake_install.cmake
+CMakeFiles/
+CMakeCache.txt
+
+# Logs éventuels
+*.log
+
+# VSCode local settings (optionnel)
+.vscode/
