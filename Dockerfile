@@ -51,6 +51,7 @@ RUN mkdir /project/build && cd /project/build && \
     -G Ninja && \
     cmake --build . --parallel
 
+
 # Create documentation
 RUN cd /project/doxy && doxygen Doxyfile
 
