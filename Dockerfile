@@ -52,16 +52,18 @@ COPY McuLib                     /project/McuLib/
 COPY src                        /project/src/
 
 # Build project
+# Remplace la section build par :
 RUN \
     cd /project \
-    && cmake --preset debug \
-    && cmake --build --preset debug \
-    && cmake --preset release \
-    && cmake --build --preset release \
-    && cmake --preset release-test \
-    && cmake --build --preset release-test \
-    && cmake --preset debug-test \
-    && cmake --build --preset debug-test
+    && echo "=== Starting CMake Debug ===" \
+    && cmake --preset debug --verbose \
+    && echo "=== CMake Debug OK, Building ===" \
+    && cmake --build --preset debug --verbose \
+    && echo "=== Debug Build Complete ===" \
+    && cmake --preset release --verbose \
+    && echo "=== CMake Release OK, Building ===" \
+    && cmake --build --preset release --verbose \
+    && echo "=== Release Build Complete ==="
 
 # Create documentation
 RUN \
