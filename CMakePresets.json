@@ -13,11 +13,14 @@
       "description": "Default build using Ninja generator",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
-      "toolchainFile": "$env{PICO_SDK_PATH}/cmake/preload/toolchains/pico_arm_gcc.cmake",
+      "toolchainFile": "${env:PICO_SDK_PATH}/cmake/preload/toolchains/pico_arm_gcc.cmake",
       "warnings": {
         "uninitialized": true,
         "dev": false,
         "deprecated": true
+      },
+      "environment": {
+        "PICO_SDK_PATH": "/project/pico-sdk"
       }
     },
     {
@@ -25,10 +28,6 @@
       "displayName": "Config Debug",
       "description": "Sets debug build type and cortex arch",
       "inherits": "config-base",
-      "architecture": {
-      "value": "arm",
-      "strategy": "external"
-      },
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug"
       }
