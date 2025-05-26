@@ -56,20 +56,29 @@ COPY src                        /project/src/
 WORKDIR /project
 
 # Build project using CMake classic instead of presets
+# DEBUG BUILD first
+RUN \
+    mkdir -p build/debug \
+    && cd build/debug \
+    && PICO_SDK_PATH=/project/pico-sdk cmake ../.. \
+        -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_TOOLCHAIN_FILE=/project/pico-sdk/cmake/preload/toolchains/pico_arm_gcc.cmake \
+        -G "Unix Makefiles" \
+    && make -j$(nproc) \
+    && echo "DEBUG build completed successfully"
+
 # RELEASE BUILD (the important one for the .hex file)
 RUN \
     mkdir -p build/release \
     && cd build/release \
-    && cmake ../.. \
+    && PICO_SDK_PATH=/project/pico-sdk cmake ../.. \
         -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_TOOLCHAIN_FILE=${PICO_SDK_PATH}/cmake/preload/toolchains/pico_arm_gcc.cmake \
-        -DCMAKE_C_COMPILER=arm-none-eabi-gcc \
-        -DCMAKE_CXX_COMPILER=arm-none-eabi-g++ \
-        -DCMAKE_ASM_COMPILER=arm-none-eabi-gcc \
+        -DCMAKE_TOOLCHAIN_FILE=/project/pico-sdk/cmake/preload/toolchains/pico_arm_gcc.cmake \
         -G "Unix Makefiles" \
     && make -j$(nproc) \
     && ls -la \
-    && test -f TSM_PicoW_CI_CD.hex && echo "SUCCESS: .hex file created"
+    && test -f TSM_PicoW_CI_CD.hex && echo "SUCCESS: .hex file created" \
+    && ls -la TSM_PicoW_CI_CD.*
 
 # Create documentation
 RUN \
