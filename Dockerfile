@@ -23,6 +23,7 @@ RUN \
     mkdir -p /project \
     && cd /project \
     && curl -d "accept_license_agreement=accepted&submit=Download+software" -X POST -O "https://www.segger.com/downloads/jlink/JLink_Linux_x86_64.deb" 
+
 # issue with udev, see https://forum.segger.com/index.php/Thread/8953-SOLVED-J-Link-Linux-installer-fails-for-Docker-containers-Error-Failed-to-update/
 RUN \
     cd /project \
@@ -51,29 +52,59 @@ COPY doxy                       /project/doxy/
 COPY McuLib                     /project/McuLib/
 COPY src                        /project/src/
 
-# Build project
-# Remplace la section build par :
-RUN \
-    cd /project \
-    && echo "=== Starting CMake Debug ===" \
-    && cmake --preset debug --verbose \
-    && echo "=== CMake Debug OK, Building ===" \
-    && cmake --build --preset debug --verbose \
-    && echo "=== Debug Build Complete ===" \
-    && cmake --preset release --verbose \
-    && echo "=== CMake Release OK, Building ===" \
-    && cmake --build --preset release --verbose \
-    && echo "=== Release Build Complete ==="
+# Set working directory
+WORKDIR /project
 
-# Create documentation
+# DEBUG: Vérifier l'environnement
+RUN echo "=== ENVIRONMENT DEBUG ===" && \
+    echo "PWD: $(pwd)" && \
+    echo "PICO_SDK_PATH: $PICO_SDK_PATH" && \
+    ls -la $PICO_SDK_PATH && \
+    echo "CMake version:" && cmake --version && \
+    echo "GCC ARM version:" && arm-none-eabi-gcc --version && \
+    echo "Ninja version:" && ninja --version
+
+# DEBUG: Vérifier les fichiers copiés
+RUN echo "=== PROJECT FILES DEBUG ===" && \
+    ls -la /project/ && \
+    echo "CMakePresets.json content:" && \
+    cat CMakePresets.json
+
+# DEBUG: Tester les presets disponibles
+RUN echo "=== CMAKE PRESETS DEBUG ===" && \
+    cmake --list-presets=all
+
+# ETAPE 1: Configuration DEBUG seulement
+RUN echo "=== STEP 1: Configuring DEBUG preset ===" && \
+    cmake --preset debug && \
+    echo "DEBUG configuration SUCCESS"
+
+# ETAPE 2: Build DEBUG seulement  
+RUN echo "=== STEP 2: Building DEBUG ===" && \
+    cmake --build --preset debug && \
+    echo "DEBUG build SUCCESS" && \
+    ls -la build/debug/
+
+# ETAPE 3: Configuration RELEASE seulement
+RUN echo "=== STEP 3: Configuring RELEASE preset ===" && \
+    cmake --preset release && \
+    echo "RELEASE configuration SUCCESS"
+
+# ETAPE 4: Build RELEASE seulement
+RUN echo "=== STEP 4: Building RELEASE ===" && \
+    cmake --build --preset release && \
+    echo "RELEASE build SUCCESS" && \
+    ls -la build/release/
+
+# Vérifier que le fichier .hex existe
+RUN test -f build/release/TSM_PicoW_CI_CD.hex && \
+    echo "SUCCESS: .hex file found!" && \
+    ls -la build/release/TSM_PicoW_CI_CD.hex
+
+# Create documentation (déplacé après les builds critiques)
 RUN \
     cd /project/doxy \
     && doxygen Doxyfile
-
-# run tests: latency issues with running on GitHub: do it manually
-#RUN \
-#    cd /project \
-#    && ctest -v --test-dir build/debug-test --timeout 120 --output-on-failure
 
 # Command that will be invoked when the container starts
 ENTRYPOINT ["/bin/bash"]
