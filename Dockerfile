@@ -56,19 +56,6 @@ COPY src                        /project/src/
 WORKDIR /project
 
 # Build project using CMake classic instead of presets
-# DEBUG BUILD
-RUN \
-    mkdir -p build/debug \
-    && cd build/debug \
-    && cmake ../.. \
-        -DCMAKE_BUILD_TYPE=Debug \
-        -DCMAKE_TOOLCHAIN_FILE=${PICO_SDK_PATH}/cmake/preload/toolchains/pico_arm_gcc.cmake \
-        -DCMAKE_C_COMPILER=arm-none-eabi-gcc \
-        -DCMAKE_CXX_COMPILER=arm-none-eabi-g++ \
-        -DCMAKE_ASM_COMPILER=arm-none-eabi-gcc \
-        -G "Unix Makefiles" \
-    && make -j$(nproc)
-
 # RELEASE BUILD (the important one for the .hex file)
 RUN \
     mkdir -p build/release \
