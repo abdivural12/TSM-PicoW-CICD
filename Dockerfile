@@ -1,6 +1,9 @@
 # Fetch ubuntu image
 FROM ubuntu:24.04
 
+# Force rebuild - change this comment to invalidate cache: v2024-05-27-fix
+# This ensures GitHub Actions rebuilds from scratch
+
 # Install prerequisites
 RUN \
     apt update \
