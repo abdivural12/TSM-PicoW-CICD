@@ -55,6 +55,9 @@ COPY doxy                       /project/doxy/
 COPY McuLib                     /project/McuLib/
 COPY src                        /project/src/
 
+# Fix McuLib header inclusion issue
+RUN sed -i 's/#include "pico\/platform\.h"/#include "pico.h"/g' /project/McuLib/src/McuUnity.c
+
 # Set working directory
 WORKDIR /project
 
