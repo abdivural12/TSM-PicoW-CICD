@@ -1,30 +1,10 @@
-# CHANGELOG.md
+## [0.0.4] - 2025-05-27
 
-## v0.0.4
-Fixes:
- - fixed LED test
- - updated actions/checkout@v3 to actions/checkout@v4
+### Added
+- GitHub Actions CI/CD pipeline working
+- Docker containerization for automated builds
+- Automatic .hex file generation
 
-Features:
- - added LED functionality
-
-## v0.0.3
-Fixes:
- - changed probe ID
-
-Features:
- - cleanup
-
-## v0.0.2
-Fixes:
- - Updated CTest command
-
-Features:
- - none
-
-## v0.0.1
-Fixes:
- - None
-
-Features:
- - Initial version of application
+### Fixed
+- McuLib header inclusion issues
+- Docker build configuration
