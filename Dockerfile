@@ -59,18 +59,7 @@ COPY src                        /project/src/
 WORKDIR /project
 
 # Build project using CMake classic instead of presets
-# DEBUG BUILD first
-RUN \
-    mkdir -p build/debug \
-    && cd build/debug \
-    && PICO_SDK_PATH=/project/pico-sdk cmake ../.. \
-        -DCMAKE_BUILD_TYPE=Debug \
-        -DPICO_SDK_PATH=/project/pico-sdk \
-        -G "Unix Makefiles" \
-    && make -j$(nproc) \
-    && echo "DEBUG build completed successfully"
-
-# RELEASE BUILD (the important one for the .hex file)
+# RELEASE BUILD ONLY (the important one for the .hex file)
 RUN \
     mkdir -p build/release \
     && cd build/release \
