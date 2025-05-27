@@ -65,7 +65,7 @@ RUN \
     && cd build/debug \
     && PICO_SDK_PATH=/project/pico-sdk cmake ../.. \
         -DCMAKE_BUILD_TYPE=Debug \
-        -DCMAKE_TOOLCHAIN_FILE=/project/pico-sdk/cmake/preload/toolchains/pico_arm_gcc.cmake \
+        -DPICO_SDK_PATH=/project/pico-sdk \
         -G "Unix Makefiles" \
     && make -j$(nproc) \
     && echo "DEBUG build completed successfully"
@@ -76,7 +76,7 @@ RUN \
     && cd build/release \
     && PICO_SDK_PATH=/project/pico-sdk cmake ../.. \
         -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_TOOLCHAIN_FILE=/project/pico-sdk/cmake/preload/toolchains/pico_arm_gcc.cmake \
+        -DPICO_SDK_PATH=/project/pico-sdk \
         -G "Unix Makefiles" \
     && make -j$(nproc) \
     && ls -la \
