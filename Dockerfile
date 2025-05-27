@@ -8,7 +8,7 @@ FROM ubuntu:24.04
 RUN \
     apt update \
     && apt install -y git python3 \
-    && apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential ninja-build
+    && apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential ninja-build make
 
 # Install nano editor
 RUN apt-get install -y nano
